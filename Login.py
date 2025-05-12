@@ -29,7 +29,26 @@ sign_in_button.click()
 #To verify successfully login to OVERVIEW screen
 #XPATH - //tagname[@attribute='value'] -> //input[@type='submit'] 
 
-user_name = WebDriverWait(driver,10).until(EC.presence_of_element_located((By.XPATH,"//")))
+
+
+user_name = WebDriverWait(driver,10).until(EC.visibility_of_element_located((By.XPATH,"//app-top-nav/nav/div/div[2]/div[1]/div")))
+user-details-main ng-star-inserted
+
+# Define a function to check if the API call is complete
+#def is_api_call_complete(driver):
+    #return driver.execute_script("return window.currentUserApiLoaded === true;")
+
+# Wait for the API call to complete (adjust the timeout as needed)
+#WebDriverWait(driver, 20).until(is_api_call_complete)
+
+#Get text of the element
+user_name_text = user_name.text
+
+#Validate the text
+assert user_name_text == "AZWANA BINTI AHMAD (AZWBA)", f"Expected 'AZWANA BINTI AHMAD', but value '{user_name_text}'"
+
+print("Validation successful: The user name is correct")
+
 
 
 
