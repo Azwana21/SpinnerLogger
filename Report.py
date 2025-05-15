@@ -60,7 +60,7 @@ else:
     print("VAM Checkbox is not selected")
 
 #Validate the VAM is available in the drop-down
-assert factory_value_text == "VAM", f"Expected 'All factories', but value '{factory_value_text}'"
+assert factory_value_text == "VAM", f"Expected 'VAM', but value '{factory_value_text}'"
 print("Validation successful: VAM is available in the drop-down Factory")
 
 
@@ -85,13 +85,52 @@ else:
 
 
 #Validate the ROE is available in the drop-down
-assert factory_value_text == "ROE", f"Expected 'All factories', but value '{factory_value_text}'"
+assert factory_value_text == "ROE", f"Expected 'ROE', but value '{factory_value_text}'"
 print("Validation successful: ROE is available in the drop-down Factory")
 
 # Get text of the Factory drop_down : MOS
 factory_value_MOS = WebDriverWait (driver,10).until(EC.visibility_of_element_located((By.XPATH,"/html/body/div[3]/div[2]/div/div/div/mat-option[4]/span")))
 factory_value_text = factory_value_MOS.text
 
+print({factory_value_text})
 
+#To click the checkbox
+MOS_checked = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/div[3]/div[2]/div/div/div/mat-option[4]/mat-pseudo-checkbox"))).click()
 
+#To locate the checkbox element again to check it's state
+MOS_checkbox = driver.find_element(By.XPATH,"/html/body/div[3]/div[2]/div/div/div/mat-option[4]/mat-pseudo-checkbox")
+MOS_checkbox_class = MOS_checkbox.get_attribute("class")
+
+#Validate the checkbox has been selected
+if "mat-pseudo-checkbox-checked" in MOS_checkbox_class:
+    print("MOS Checkbox is selected")
+else:
+    print("MOS Checkbox is not selected")
+
+#Validate the MOS is available in the drop-down
+assert factory_value_text == "MOS", f"Expected 'MOS', but value '{factory_value_text}'"
+print("Validation Successful: MOS is available in the drop-down Factory")
+
+#Get text of the Factory drop-down : SEL
+factory_value_SEL = WebDriverWait (driver,10).until(EC.visibility_of_element_located((By.XPATH,"/html/body/div[3]/div[2]/div/div/div/mat-option[5]/span")))
+factory_value_text = factory_value_SEL.text
+
+print({factory_value_text})
+
+#To click the checkbox
+SEL_checked = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/div[3]/div[2]/div/div/div/mat-option[5]/mat-pseudo-checkbox"))).click()
+
+#To locate the checkbox element again to check it's state
+SEL_checkbox = driver.find_element(By.XPATH,"/html/body/div[3]/div[2]/div/div/div/mat-option[5]/mat-pseudo-checkbox")
+SEL_checkbox_class = SEL_checkbox.get_attribute("class")
+
+#Validate the checkbox has been selected
+if "mat-pseudo-checkbox-checked" in SEL_checkbox_class:
+    print("SEL checkbox is selected")
+else:
+    print("SEL Checkbox is not selected")
+
+#Validate the SEL is available in the drop-down
+assert factory_value_text =="SEL", f"Expected 'SEL', but value '{factory_value_text}"
+print("Validate Successful: SEL is avilable in the drop-down Factory")
 time.sleep (20)
