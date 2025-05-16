@@ -133,4 +133,6 @@ else:
 #Validate the SEL is available in the drop-down
 assert factory_value_text =="SEL", f"Expected 'SEL', but value '{factory_value_text}"
 print("Validate Successful: SEL is avilable in the drop-down Factory")
-time.sleep (20)
+
+
+time.sleep (30)
