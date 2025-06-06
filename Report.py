@@ -38,7 +38,7 @@ print({factory_value_text})
 #Validate the All Factory is available in the drop-down
 assert factory_value_text == "All factories", f"Expected 'All factories', but value '{factory_value_text}'"
 
-print("Validation successful: All factories is available in the drop-down FACTORY")
+print("✅ Validation successful: All factories is available in the drop-down FACTORY")
 
 #Get text of the Factory Drop-down: VAM
 factory_value_VAM = WebDriverWait (driver, 10). until(EC.visibility_of_element_located((By.XPATH, "/html/body/div[3]/div[2]/div/div/div/mat-option[2]/span")))
@@ -61,7 +61,7 @@ else:
 
 #Validate the VAM is available in the drop-down
 assert factory_value_text == "VAM", f"Expected 'VAM', but value '{factory_value_text}'"
-print("Validation successful: VAM is available in the drop-down Factory")
+print("✅ Validation successful: VAM is available in the drop-down Factory")
 
 
 #Get text of the Factory Drop-down: ROE
@@ -86,7 +86,7 @@ else:
 
 #Validate the ROE is available in the drop-down
 assert factory_value_text == "ROE", f"Expected 'ROE', but value '{factory_value_text}'"
-print("Validation successful: ROE is available in the drop-down Factory")
+print("✅ Validation successful: ROE is available in the drop-down Factory")
 
 # Get text of the Factory drop_down : MOS
 factory_value_MOS = WebDriverWait (driver,10).until(EC.visibility_of_element_located((By.XPATH,"/html/body/div[3]/div[2]/div/div/div/mat-option[4]/span")))
@@ -109,7 +109,7 @@ else:
 
 #Validate the MOS is available in the drop-down
 assert factory_value_text == "MOS", f"Expected 'MOS', but value '{factory_value_text}'"
-print("Validation Successful: MOS is available in the drop-down Factory")
+print("✅ Validation Successful: MOS is available in the drop-down Factory")
 
 #Get text of the Factory drop-down : SEL
 factory_value_SEL = WebDriverWait (driver,10).until(EC.visibility_of_element_located((By.XPATH,"/html/body/div[3]/div[2]/div/div/div/mat-option[5]/span")))
@@ -132,7 +132,16 @@ else:
 
 #Validate the SEL is available in the drop-down
 assert factory_value_text =="SEL", f"Expected 'SEL', but value '{factory_value_text}"
-print("Validate Successful: SEL is avilable in the drop-down Factory")
+print("✅ Validate Successful: SEL is available in the drop-down Factory")
+
+
+#Filter features validation
+#Select Factory
+MOS_checked = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/div[3]/div[2]/div/div/div/mat-option[4]/mat-pseudo-checkbox"))).click()
+
+#factory_select = driver.find_element(By.XPATH,"")
+
+#filter = driver.find_element (By.XPATH,"")
 
 
 time.sleep (30)
