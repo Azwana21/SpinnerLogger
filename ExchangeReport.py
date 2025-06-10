@@ -155,5 +155,9 @@ else:
     print("❌ Failed: Upload failed as file is not visible in UI")
 
 
+#Delete upload file
+
+file_delete = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"")))
+
 
 time.sleep(20)
