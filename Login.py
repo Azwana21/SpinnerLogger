@@ -1,4 +1,5 @@
 import time
+import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -15,6 +16,7 @@ print(driver.title)
 print(driver.current_url)
 
 #Login to Spinner Logger (Authorization SSO)
+time.sleep (5)
 
 email_login = WebDriverWait(driver,10).until(EC.presence_of_element_located((By.ID,"i0116")))
 email_login.send_keys("azwana.ahmad@rockwool.com")
@@ -24,18 +26,27 @@ sign_in_button.click()
 
 time.sleep (20)
 
-#To validate and extract token
-token = driver.execute_script("return window.localStorage.getItem('secret');")
-print("Access Token:",token)
 
-import requests
+#Wait for redirection and extract token
+time.sleep(5)
+token = driver.execute_script("return window.sessionStorage.getItem('access_token');")
+print("Extract Token:",token)
 
+
+
+
+#Validate token by calling a protected API
 headers = {
-    "Authorization":f"Bearer {token}"
+    "Authorization": f"Bearer {token}"
 }
-
 response = requests.get("https://login.microsoftonline.com/ec85c1f0-148f-4d0f-b9f5-bfd62a99ed8c/oauth2/v2.0/token", headers=headers)
-print(response.status_code, response.json())
+
+if response.status_code == 200:
+    print("✅ Token is valid. Access granted")
+else:
+    print(f"❌ Token validation failed. Status:{response.status_code}")
+    print(response.json())
+
 
 #To validate if the name is correct
 
