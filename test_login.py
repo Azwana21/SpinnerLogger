@@ -32,20 +32,19 @@ time.sleep(5)
 token = driver.execute_script("return window.sessionStorage.getItem('access_token');")
 print("Extract Token:",token)
 
-
-
-
 #Validate token by calling a protected API
 headers = {
     "Authorization": f"Bearer {token}"
 }
 response = requests.get("https://login.microsoftonline.com/ec85c1f0-148f-4d0f-b9f5-bfd62a99ed8c/oauth2/v2.0/token", headers=headers)
 
-if response.status_code == 200:
-    print("✅ Token is valid. Access granted")
-else:
-    print(f"❌ Token validation failed. Status:{response.status_code}")
-    print(response.json())
+def test_token_validation():
+    
+    if response.status_code == 200:
+        print("PASSED:Token is valid. Access granted")
+    else:
+        print(f"FAILED:Token validation failed. Status:{response.status_code}")
+        print(response.json())
 
 
 #To validate if the name is correct
@@ -56,20 +55,22 @@ user_name = WebDriverWait(driver,10).until(EC.visibility_of_element_located((By.
 user_name_text = user_name.text
 
 #Validate the username logged in the system
-assert user_name_text == "AZWANA BINTI AHMAD (AZWBA)", f"Expected 'AZWANA BINTI AHMAD (AZWBA)', but value '{user_name_text}'"
-
-print("✅ Validation successful: The user name is correct")
+def test_login_success():
+    expected_name = "AZWANA BINTI AHMAD (AZWBA)"
+    assert user_name_text == expected_name, f"Expected '{expected_name}', but value '{user_name_text}'"
+    print("PASSED:Validation successful: The user name is correct")
 
 #Validate if the OPCO display is correct
+
 user_opco = WebDriverWait(driver,10).until(EC.visibility_of_element_located((By.XPATH,"/html/body/app-root/div/app-top-nav/nav/div/div[2]/div[1]/div[2]")))
 
 #Get text of the OPCO element
 user_opco_text = user_opco.text
 
 #Validate if the OPCO is correct
-assert user_opco_text == "DIGI", f"Expected 'DIGI', but value '{user_opco_text}'"
-
-print("✅ Validation successful: The user OPCO is correct")
+def test_opco_display():
+    assert user_opco_text == "DIGI", f"Expected 'DIGI', but value '{user_opco_text}'"
+    print("PASSED:Validation successful: The user OPCO is correct")
 
 
 #Validate if the user image is display.
@@ -84,13 +85,17 @@ is_displayed = user_image.is_displayed()
 
 is_loaded = driver.execute_script("return arguments[0].complete && typeof arguments[0].naturalWidth != 'undefined' && arguments[0].naturalWidth > 0", user_image)
 
-
 #Final image validation
-if is_displayed and is_loaded:
-    print ("✅ Validation successful: PNG image is displayed and loaded successfully")
+def test_image_display():
+    if is_displayed and is_loaded:
+        print ("PASSED:Validation successful: PNG image is displayed and loaded successfully")
+    else:
+        print("FAILED:Validation Failed: PNG image is not displayed or not loaded properly")
 
-else:
-    print("❌ Validation Failed: PNG image is not displayed or not loaded properly")
+test_token_validation()
+test_login_success()
+test_opco_display()
+test_image_display()
 
 time.sleep (20)
 

@@ -65,10 +65,10 @@ total_runtime = WebDriverWait(driver,10).until(EC.visibility_of_element_located(
 total_runtime_value = total_runtime.text
 
 if total_runtime_value.strip():
-    print("✅ Success: Total runtime is displayed")
+    print("PASSED:Total runtime is displayed")
     print("Total Runtime Value:", total_runtime_value)
 else:
-    print("❌ Failed: Total runtime is not visible in the UI")
+    print("FAILED: Total runtime is not visible in the UI")
 
 time.sleep(10)
 
@@ -81,10 +81,10 @@ runtime_rotor = WebDriverWait(driver,10).until(EC.visibility_of_element_located(
 runtime_rotor_value = runtime_rotor.text
 
 if runtime_rotor_value.strip():
-    print("✅ Success: Runtime hours is displayed")
+    print("PASSED: Runtime hours is displayed")
     print("Runtime hours value is:",runtime_rotor_value)
 else:
-    print("❌ Failed: Runtime house is not visible in the UI")
+    print("FAILED: Runtime hours is not visible in the UI")
 
 #Go to Exchange report
 
@@ -99,10 +99,9 @@ text = exchange_report_title.text
 print("Page Title:",text)
 
 if "COMPONENT EXCHANGE" in text:
-    print("✅ Success: The Exchange Report page is fully loaded")
+    print("PASSED: The Exchange Report page is fully loaded")
 else:
-    print("❌ Failed: Failed to load the Exchange report page")
-
+    print("FAILED: Failed to load the Exchange report page")
 
 time.sleep(20)
 
@@ -145,19 +144,50 @@ file_upload.send_keys("C:\\Users\\azwba\\OneDrive - ROCKWOOL Group\\Documents\\S
 file_upload_upload = file_upload.click
 
 
-time.sleep (5)
+#time.sleep (10)
 #Verify if the upload is successfull
-file_upload_done = driver.find_element(By.XPATH,"/html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[1]/div[2]/div[2]/div[2]/app-file-upload/div/div/div[2]/div[1]/div/div[1]/span[3]").text
+#file_upload_done = driver.find_element(By.XPATH,"/html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[1]/div[2]/div[2]/div[2]/app-file-upload/div/div/div[2]").text
+
+file_upload_done = WebDriverWait(driver,20).until(EC.presence_of_element_located((By.XPATH,"/html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[1]/div[2]/div[2]/div[2]/app-file-upload/div/div/div[2]"))).text
+
+
+
 if "png-5mb-1.png" in file_upload_done:
-    print ("✅ Success: File is successfully uploaded")
+    print ("PASSED: File is successfully uploaded")
     print("File Name :",file_upload_done )
 else:
-    print("❌ Failed: Upload failed as file is not visible in UI")
+    print("FAILED: Upload failed as file is not visible in UI")
 
 
 #Delete upload file
 
-file_delete = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"")))
+file_delete = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[1]/div[2]/div[2]/div[2]/app-file-upload/div/div/div[2]/div/div/div[2]/rw-button/button/span"))).click()
+
+
+#file_delete = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,""))).click()
+
+#/html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[1]/div[2]/div[2]/div[2]/app-file-upload/div/div/div[2]
+
+
+confirmation_delete = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/div[2]/div[2]/div/mat-dialog-container/confirmation-dialog/div/div/rw-button[2]/button"))).click()
+
+
+#wait for popup container to appear
+delete_popup = WebDriverWait(driver,5).until(EC.visibility_of_element_located((By.CLASS_NAME,"notification-snack")))
+
+#Get the message text
+success_delete_message = delete_popup.find_element(By.CLASS_NAME,"msg-container").get_attribute("innerText")
+
+#verify the full message
+expected_text = "File removed"
+actual_text = f"{success_delete_message}"
+assert actual_text == expected_text, f"Expected '{expected_text}', but got '{actual_text}'"
+
+print("Popup message verified successfully")
+
+
+
+
 
 
 time.sleep(20)
