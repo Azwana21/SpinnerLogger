@@ -1,8 +1,10 @@
+import pytest
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 
 
 #Chrome driver service
@@ -64,11 +66,12 @@ total_runtime = WebDriverWait(driver,10).until(EC.visibility_of_element_located(
 #Get value of the total runtime element
 total_runtime_value = total_runtime.text
 
-if total_runtime_value.strip():
-    print("PASSED:Total runtime is displayed")
-    print("Total Runtime Value:", total_runtime_value)
-else:
-    print("FAILED: Total runtime is not visible in the UI")
+def test_total_runtime_displayed():
+    if total_runtime_value.strip():
+        print("PASSED:Total runtime is displayed")
+        print("Total Runtime Value:", total_runtime_value)
+    else:
+        print("FAILED: Total runtime is not visible in the UI")
 
 time.sleep(10)
 
@@ -79,12 +82,12 @@ runtime_rotor = WebDriverWait(driver,10).until(EC.visibility_of_element_located(
 #Get value of the runtime
 
 runtime_rotor_value = runtime_rotor.text
-
-if runtime_rotor_value.strip():
-    print("PASSED: Runtime hours is displayed")
-    print("Runtime hours value is:",runtime_rotor_value)
-else:
-    print("FAILED: Runtime hours is not visible in the UI")
+def test_runtime_rotor_displayed():
+    if runtime_rotor_value.strip():
+        print("PASSED: Runtime hours is displayed")
+        print("Runtime hours value is:",runtime_rotor_value)
+    else:
+        print("FAILED: Runtime hours is not visible in the UI")
 
 #Go to Exchange report
 
@@ -98,10 +101,11 @@ text = exchange_report_title.text
 
 print("Page Title:",text)
 
-if "COMPONENT EXCHANGE" in text:
-    print("PASSED: The Exchange Report page is fully loaded")
-else:
-    print("FAILED: Failed to load the Exchange report page")
+def test_exchanged_report_page_loaded():
+    if "COMPONENT EXCHANGE" in text:
+        print("PASSED: The Exchange Report page is fully loaded")
+    else:
+        print("FAILED: Failed to load the Exchange report page")
 
 time.sleep(20)
 
@@ -139,30 +143,41 @@ upload_document = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.
 
 time.sleep (5)
 
+wait = WebDriverWait(driver,10)
 file_upload = driver.find_element(By.ID,"file")
-file_upload.send_keys("C:\\Users\\azwba\\OneDrive - ROCKWOOL Group\\Documents\\Spinner Logger\\Test Data\\png-5mb-1.png")
-file_upload_upload = file_upload.click
+file_upload.send_keys("C:\\Users\\azwba\OneDrive - ROCKWOOL Group\\Documents\\Spinner Logger\\Test Data\\testImage_1.1-MB.jpg")
+file_upload.click
 
 
-#time.sleep (10)
+
+time.sleep (30)
+
 #Verify if the upload is successfull
-#file_upload_done = driver.find_element(By.XPATH,"/html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[1]/div[2]/div[2]/div[2]/app-file-upload/div/div/div[2]").text
+file_upload_done = driver.find_element(By.XPATH,"/html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[1]/div[2]/div[2]/div[2]/app-file-upload/div/div/div[2]").text
 
-file_upload_done = WebDriverWait(driver,20).until(EC.presence_of_element_located((By.XPATH,"/html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[1]/div[2]/div[2]/div[2]/app-file-upload/div/div/div[2]"))).text
+def test_file_upload():
+    # try:
+    file_upload_done = WebDriverWait(driver,20).until(EC.presence_of_element_located((By.XPATH,"/html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[1]/div[2]/div[2]/div[2]/app-file-upload/div/div/div[2]"))).text
+    if "testImage_1.1-MB.jpg" in file_upload_done:
+        print ("PASSED: File is successfully uploaded")
+        print("File Name :", file_upload_done)
+            # assert True #This marks the test as passed
+    else:
+        print("FAILED: Upload failed as file is not visible in UI")
+            # pytest.fail("File upload failed, file not visible in UI")
+    
+    # except Exception as e:
+    #     print ("Error: Exception occurred during file upload check:", str(e))
+    #     pytest.fail("File upload check failed due to exception")
 
 
-
-if "png-5mb-1.png" in file_upload_done:
-    print ("PASSED: File is successfully uploaded")
-    print("File Name :",file_upload_done )
-else:
-    print("FAILED: Upload failed as file is not visible in UI")
-
+time.sleep(20)
 
 #Delete upload file
 
-file_delete = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[1]/div[2]/div[2]/div[2]/app-file-upload/div/div/div[2]/div/div/div[2]/rw-button/button/span"))).click()
+file_delete = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[1]/div[2]/div[2]/div[2]/app-file-upload/div/div/div[2]/div/div/div[2]/rw-button/button/span")))
 
+file_delete.click()
 
 #file_delete = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,""))).click()
 
@@ -183,11 +198,34 @@ expected_text = "File removed"
 actual_text = f"{success_delete_message}"
 assert actual_text == expected_text, f"Expected '{expected_text}', but got '{actual_text}'"
 
-print("Popup message verified successfully")
+def test_delete_document_popup():
+    print("PASSED: Delete document popup message verified successfully")
 
 
+#Verify if Save for later button is clickable
+
+save_for_later = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[2]/div/div[1]/rw-button/button"))).click()
+
+#verify if popup message is displayed
+save_for_later_popup = WebDriverWait(driver,20).until(EC.visibility_of_element_located((By.XPATH,"//app-notification-snack-bar//div[contains(@class, 'msg-container') and normalize-space(text())='Saved.']")))
+
+#Get the message text
+save_for_later_success_message = save_for_later_popup.get_attribute("innerText").strip ()
+
+#verify the full message
+expected_text_save = "Saved."
+actual_text_save = f"{save_for_later_success_message}"
+assert actual_text_save == expected_text_save, f"expected '{expected_text_save}', but got '{actual_text_save}'"
+def test_save_for_later_popup():
+    print("PASSED: Save for later popup message successfully displayed")
 
 
+test_total_runtime_displayed()
+test_runtime_rotor_displayed()
+test_exchanged_report_page_loaded()
+test_file_upload()
+test_delete_document_popup()
+test_save_for_later_popup()
 
 
 time.sleep(20)

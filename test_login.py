@@ -43,7 +43,7 @@ def test_token_validation():
     if response.status_code == 200:
         print("PASSED:Token is valid. Access granted")
     else:
-        print(f"FAILED:Token validation failed. Status:{response.status_code}")
+        print(f"FAILED:Token validation failed. Status:{response.status_code}") #put more description status
         print(response.json())
 
 
