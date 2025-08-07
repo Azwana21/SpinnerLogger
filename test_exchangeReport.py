@@ -10,7 +10,7 @@ from selenium.common.exceptions import TimeoutException
 #Chrome driver service
 
 driver = webdriver.Chrome()
-driver.get("https://spinnerlogger-uat.rockwool.com/")
+driver.get("https://spinnerlogger-dev.rockwool.com/")
 
 driver.maximize_window()
 print(driver.title)
@@ -30,36 +30,41 @@ sign_in_button.click()
 
 time.sleep(20)
 
-#click the Factory drop-down to expand
-factory_select = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/app-root/div/div/app-homepage/div/div/form/div/div[1]/div[1]/mat-form-field"))).click()
+def factory_line_spinner_selection():
 
-#select MOS in Factory drop-down list
+    #click the Factory drop-down to expand
+    WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/app-root/div/div/app-homepage/div/div/form/div/div[1]/div[1]/mat-form-field"))).click()
 
-factory_select_MOS = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/div[3]/div[2]/div/div/div/mat-option[3]/span"))).click()
+    #select MOS in Factory drop-down list
 
-
-#Click the Line drop-down to expand
-line_select = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/app-root/div/div/app-homepage/div/div/form/div/div[1]/div[2]/mat-form-field/div/div[1]/div/mat-select/div/div[1]/span"))).click()
+    WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/div[3]/div[2]/div/div/div/mat-option[3]/span"))).click()
 
 
-#Select 47001001 in Line drop-down list
+    #Click the Line drop-down to expand
+    WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/app-root/div/div/app-homepage/div/div/form/div/div[1]/div[2]/mat-form-field/div/div[1]/div/mat-select/div/div[1]/span"))).click()
 
-line_select_MOS = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/div[3]/div[2]/div/div/div/mat-option/span"))).click()
 
-time.sleep(10)
+    #Select 47001001 in Line drop-down list
 
-#Click the Spinner drop-down to expand
+    WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/div[3]/div[2]/div/div/div/mat-option/span"))).click()
 
-spinner_select = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/app-root/div/div/app-homepage/div/div/form/div/div[1]/div[3]/mat-form-field/div/div[1]/div/mat-select/div/div[1]"))).click()
+    time.sleep(10)
 
-#Select Z30 in the Spinner ID drop-down list
+    #Click the Spinner drop-down to expand
 
-spinner_select_Z10 = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/div[3]/div[2]/div/div/div/mat-option[4]/span"))).click()
+    WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/app-root/div/div/app-homepage/div/div/form/div/div[1]/div[3]/mat-form-field/div/div[1]/div/mat-select/div/div[1]"))).click()
 
-time.sleep(10)
+    #Select Z30 in the Spinner ID drop-down list
+
+    WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/div[3]/div[2]/div/div/div/mat-option[4]/span"))).click()
+
+    time.sleep(10)
+
+
+
 
 #Validate if the Total runtime for spinner is display
-
+factory_line_spinner_selection()
 total_runtime = WebDriverWait(driver,10).until(EC.visibility_of_element_located((By.XPATH,"/html/body/app-root/div/div/app-homepage/div/div/form/div/div[2]/div[1]/mat-card/div/div[1]/span")))
 
 
@@ -92,6 +97,8 @@ def test_runtime_rotor_displayed():
 #Go to Exchange report
 
 exchange_report = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/app-root/div/div/app-homepage/div/div/form/div/div[2]/div[1]/mat-card/div/div[2]/div[1]/div[2]/mat-table/mat-row[3]/mat-cell[3]/div"))).click()
+
+
 
 #To verify if application go to new exchange report .
 
@@ -220,12 +227,128 @@ def test_save_for_later_popup():
     print("PASSED: Save for later popup message successfully displayed")
 
 
+#verify if the save draft information is still successfully displayed after save for later button is clicked
+
+overview_screen = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/app-root/div/app-top-nav/nav/div/nav/div/div/div/a[1]"))).click()
+
+#Go to back again to existing Exchange report
+
+
+time.sleep(30)
+
+#Go to Exchange report again
+
+exchange_report = WebDriverWait(driver,10).until(EC.element_to_be_clickable((By.XPATH,"/html/body/app-root/div/div/app-homepage/div/div/form/div/div[2]/div[1]/mat-card/div/div[2]/div[1]/div[2]/mat-table/mat-row[3]/mat-cell[3]/div"))).click()
+
+
+
+#To verify if application go to new exchange report .
+
+exchange_report_title = driver.find_element(By.XPATH,"/html/body/app-root/div/div/app-exchange-component/app-top-title-bar/div/div/div/div[1]/div[2]")
+
+text = exchange_report_title.text
+
+print("Page Title:",text)
+
+
+time.sleep(20)
+
+#To verify if the save data is available in exchanged report
+
+#verify if the work ID is saved
+def test_work_id_saved():
+    saved_work_id_value = WebDriverWait(driver,10).until(EC.visibility_of_element_located((By.XPATH,"//html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[1]/div[1]/div[1]/div[2]/mat-form-field/div/div[1]/div/input")))
+    if saved_work_id_value:
+        saved_work_id = saved_work_id_value.get_attribute("value")
+        print("PASSSED: Work ID Value",saved_work_id)
+    else:
+        print("FAILED: WorkID value does not exist in UI")
+
+#verify if the damage type is saved
+def test_damage_type_saved():
+    saved_damage_type_value= WebDriverWait(driver,10).until(EC.visibility_of_element_located((By.XPATH,"/html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[1]/div[1]/div[2]/div[2]/mat-form-field/div/div[1]/div/mat-select/div/div[1]/span/span")))
+    if saved_damage_type_value:
+        saved_damage_type = saved_damage_type_value.text
+        print("PASSED: Damage Type value", saved_damage_type)
+    else:
+        print("FAILED: Damage Type value does not exist in UI")
+
+#verify if the damage cause is saved
+def test_damage_cause_saved():
+    saved_damage_cause_value = WebDriverWait(driver,10).until(EC.visibility_of_element_located((By.XPATH,"/html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[1]/div[1]/div[3]/div[2]/mat-form-field/div/div[1]/div/mat-select/div/div[1]/span/span")))
+    if saved_damage_cause_value:
+        saved_damage_cause = saved_damage_cause_value.text
+        print("PASSED: Damage cause value", saved_damage_cause_value)
+    else:
+        print("FAILED: Damage cause value does not exist in UI")
+
+#Verify if the damage location is saved
+def test_damage_location_saved():
+    saved_damage_location_value = WebDriverWait(driver,10).until(EC.visibility_of_element_located((By.XPATH,"/html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[1]/div[1]/div[4]/div[2]/mat-form-field/div/div[1]/div/mat-select/div/div[1]/span/span")))
+    if saved_damage_location_value:
+        saved_damage_location = saved_damage_location_value.text
+        print("PASSED: Damage Location value", saved_damage_location)
+    else:
+        print("FAILED: Damage Location value does not exist in UI")
+
+#verify if the removal date is saved
+def test_removal_date_saved():
+    saved_removal_date_value = WebDriverWait(driver,10).until(EC.visibility_of_element_located((By.XPATH,"/html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[1]/div[1]/div[5]/div[2]/mat-form-field/div/div[1]/div[1]/input")))
+    if saved_removal_date_value:
+        saved_removal_date = saved_removal_date_value.get_attribute("value")
+        print("PASSED: Removal date value", saved_removal_date)
+    else:
+        print("FAILED: Removal date value does not exist in UI")
+
+#verify if the replace partID is saved
+def test_replace_partid_saved():
+    saved_replace_partid_value = WebDriverWait(driver,10).until(EC.visibility_of_element_located((By.XPATH, "/html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[1]/div[1]/div[6]/div[2]/mat-form-field/div/div[1]/div/input")))
+    if saved_replace_partid_value:
+        saved_replace_partid = saved_replace_partid_value.get_attribute("value")
+        print("PASSED: replace part ID value", saved_replace_partid)
+    else:
+        print("FAILED: Replace part id value does not exist in UI")
+
+#Veirfy if the Detailed descirption is saved
+def test_detailed_descirption_saved():
+    saved_description_value = WebDriverWait(driver,10).until(EC.visibility_of_element_located((By.XPATH, "/html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[1]/div[2]/div[1]/div[2]/mat-form-field/div/div[1]/div/textarea")))
+    if saved_description_value:
+        saved_description = saved_description_value.get_attribute("value")
+        print("PASSED: Detailed description value:", saved_description)
+    else:
+        print("FAILED: Detailed description value does not exist in UI")
+
+
+
+
+
+# saved_damage_cause = driver.find_element(By.XPATH,"/html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[1]/div[1]/div[3]/div[2]/mat-form-field/div/div[1]/div/mat-select/div/div[1]").get_attribute("value")
+# print("Damage Cause:", saved_damage_cause)
+
+# saved_damage_location = driver.find_element(By.XPATH,"/html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[1]/div[1]/div[4]/div[2]/mat-form-field/div/div[1]/div/mat-select/div/div[1]").get_attribute("value")
+# print("Damage Location:", saved_damage_location)
+
+# saved_removal_date = driver.find_element(By.XPATH,"/html/body/app-root/div/div/app-exchange-component/div/div/form/div/mat-card[2]/div[1]/div[1]/div[5]/div[2]/mat-form-field/div/div[1]/div[1]/input").get_attribute("value")
+# print("Removal Date:", saved_removal_date)
+
+
+time.sleep(10)
+
+
+
 test_total_runtime_displayed()
 test_runtime_rotor_displayed()
 test_exchanged_report_page_loaded()
 test_file_upload()
 test_delete_document_popup()
 test_save_for_later_popup()
+test_work_id_saved()
+test_damage_type_saved()
+test_damage_cause_saved()
+test_damage_location_saved()
+test_removal_date_saved()
+test_replace_partid_saved()
+test_detailed_descirption_saved()
 
 
 time.sleep(20)
